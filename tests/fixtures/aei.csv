@@ -1,0 +1,5 @@
+date_start,date_end,geo_id,geo_level,category_name,hierarchy_level,metric_id,value,node_name,node_external_id
+2026-04-01,2026-05-01,GLOBAL,global,overall,0,collaboration_bucket_automation_pct,48.98,Overall,
+2026-05-01,2026-06-01,GLOBAL,global,overall,0,collaboration_bucket_automation_pct,48.62,Overall,
+2026-05-01,2026-06-01,BR,country,overall,0,collaboration_bucket_automation_pct,44.10,Overall,
+2026-05-01,2026-06-01,GLOBAL,global,onet,0,pct,0.25,X,

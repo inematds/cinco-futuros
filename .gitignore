@@ -1,0 +1,4 @@
+estado/
+!kit/estado/.gitkeep
+kit/estado/*
+__pycache__/

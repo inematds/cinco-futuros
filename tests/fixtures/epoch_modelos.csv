@@ -1,0 +1,6 @@
+Model,Organization,Publication date,Training compute (FLOP),Model accessibility,Country (of organization)
+Fechado-A,LabA,2026-09-01,1e27,API access,United States of America
+Aberto-B,LabB,2026-07-01,2e25,Open weights (unrestricted),China
+Fechado-C,LabC,2026-03-01,5e25,Unreleased,China
+Antigo,LabZ,2024-01-01,9e27,API access,United States of America
+SemCompute,LabY,2026-08-01,,API access,United States of America

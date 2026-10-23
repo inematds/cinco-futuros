@@ -1,0 +1,7 @@
+Name,Status,H100 equivalents,Owner,Exclude,Possible Duplicate
+c1,Existing,500,Dono1,,
+c2,Existing,300,Dono2,,
+c3,Existing,100,Dono3,,
+c4,Existing,100,Dono4,,
+c5,Planned,9000,Dono9,,
+c6,Existing,8000,Dono8,TRUE,
