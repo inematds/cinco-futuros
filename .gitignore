@@ -1,4 +1,3 @@
-estado/
-!kit/estado/.gitkeep
-kit/estado/*
 __pycache__/
+kit/estado/*
+!kit/estado/.gitkeep
