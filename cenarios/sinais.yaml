@@ -1,0 +1,169 @@
+# Sinais dos 5 futuros — fonte única (o coletor da fase 2 e as skills leem este arquivo)
+# coleta: auto (o coletor baixa) | manual (o agente lê a fonte e anota) | pessoal (a própria pessoa responde na revisão)
+# aponta: cenário -> "sobe" (o sinal empurra para esse futuro) ou "desce"
+# limiar: PROPOSTA inicial para calibrar com os dados (fase 2); nada aqui é previsão
+# Cenários: 1 extinção · 2 zoológico · 3 governo · 4 paraíso · 5 utopia
+
+fontes:
+  epoch_modelos: {url: "https://epoch.ai/data/all_ai_models.csv", licenca: "CC BY 4.0", testado: "2026-10-23 (3.628 linhas)"}
+  epoch_clusters: {url: "https://epoch.ai/data/gpu_clusters.csv", licenca: "CC BY 4.0", testado: "2026-10-23"}
+  epoch_datacenters: {url: "https://epoch.ai/data/data_centers/data_centers.csv", licenca: "CC BY 4.0", testado: "2026-10-23"}
+  metr: {url: "https://github.com/METR/eval-analysis-public (reports/time-horizon-1-1/data/raw/runs.jsonl)", licenca: "não declarada — só citar o número publicado", testado: "2026-10-23"}
+  aiid: {url: "https://incidentdatabase.ai/research/snapshots/ (backup semanal .tar.bz2)", licenca: "a conferir", testado: "2026-10-23 (backup de 19/10)"}
+  aei: {url: "https://huggingface.co/datasets/Anthropic/EconomicIndex", licenca: "MIT (cartão do dataset)", testado: "2026-10-23 (release 2026_06_26)"}
+  stanford_canarios: {url: "https://digitaleconomy.stanford.edu/publication/canaries-in-the-coal-mine-six-facts-about-the-recent-employment-effects-of-artificial-intelligence/", licenca: "citação", testado: "não"}
+  ai_index: {url: "https://hai.stanford.edu/ai-index", licenca: "citação", testado: "não"}
+  ai_futures: {url: "https://blog.ai-futures.org", licenca: "citação", testado: "não"}
+  eu_ai_act: {url: "https://eur-lex.europa.eu (Official Journal)", licenca: "pública", testado: "não"}
+  pl_2338: {url: "https://www.camara.leg.br (PL 2338/2023, lei brasileira de IA)", licenca: "pública", testado: "não"}
+  caged: {url: "https://www.gov.br/trabalho-e-emprego (Novo CAGED)", licenca: "pública", testado: "não — lacuna da pesquisa 1"}
+
+sinais:
+  - id: compute-fronteira
+    nome: Maior treino de IA dos últimos 12 meses
+    metrica: max(Training compute FLOP) com data nos últimos 365 dias
+    fonte: epoch_modelos
+    coleta: auto
+    valor_inicial: "9,4e26 FLOP (GPT-6 Astra, OpenAI, 03/09/2026) — lido em 23/10/2026"
+    limiar: ">= 1e27 FLOP"
+    aponta: {1: sobe, 3: sobe}
+    confianca: alta (dado), média (leitura do cenário)
+
+  - id: lacuna-aberto-fechado
+    nome: Distância entre o melhor modelo aberto e o melhor fechado
+    metrica: compute do maior modelo fechado / compute do maior modelo de pesos abertos (12 meses)
+    fonte: epoch_modelos
+    coleta: auto
+    valor_inicial: "~47x (9,4e26 fechado vs 2,0e25 Kimi K3 aberto) — lido em 23/10/2026"
+    limiar: "> 30x = poder concentrado; < 10x = acesso amplo"
+    aponta: {2: sobe, 3: sobe, 5: desce}
+    confianca: média — compute não é qualidade
+
+  - id: corrida-eua-china
+    nome: Corrida entre EUA e China
+    metrica: compute do maior modelo dos EUA / do maior modelo da China (12 meses)
+    fonte: epoch_modelos
+    coleta: auto
+    limiar: "< 3x = corrida apertada (pressão para cortar segurança)"
+    aponta: {1: sobe}
+    confianca: média — o AI Index 2026 diz que a lacuna de desempenho já fechou
+
+  - id: concentracao-clusters
+    nome: Concentração dos maiores clusters de GPU
+    metrica: fatia dos 3 maiores donos na soma dos 20 maiores clusters
+    fonte: epoch_clusters
+    coleta: auto
+    limiar: "> 60%"
+    aponta: {2: sobe, 3: sobe}
+    confianca: média
+
+  - id: horizonte-agentes
+    nome: Tamanho da tarefa que um agente faz sozinho
+    metrica: horizonte de 50% do METR (minutos de trabalho humano) e tempo para dobrar
+    fonte: metr
+    coleta: manual
+    limiar: "horizonte >= 1 semana de trabalho (40 h) ou dobra em < 4 meses"
+    aponta: {1: sobe, 4: sobe}
+    confianca: média — mede tarefas de software
+
+  - id: ritmo-ai2027
+    nome: Ritmo real comparado ao AI 2027
+    metrica: "% do ritmo previsto segundo os autores (AI Futures Project)"
+    fonte: ai_futures
+    coleta: manual
+    valor_inicial: "65–75% do previsto (nota dos autores sobre 2025) — a conferir"
+    limiar: ">= 100% = no ritmo do cenário"
+    aponta: {1: sobe, 3: sobe}
+    confianca: baixa — autoavaliação
+
+  - id: incidentes-ia
+    nome: Incidentes com IA
+    metrica: incidentes novos por mês (média de 3 meses ÷ média de 12 meses)
+    fonte: aiid
+    coleta: auto
+    limiar: "> 1,5"
+    aponta: {1: sobe, 3: sobe}
+    confianca: média — mais registro também é mais atenção
+
+  - id: automacao-uso
+    nome: IA fazendo no lugar, não junto
+    metrica: fatia de conversas de automação (diretiva) contra aumento no Economic Index
+    fonte: aei
+    coleta: auto
+    limiar: "> 50% automação"
+    aponta: {4: sobe, 2: sobe, 5: desce}
+    confianca: média — campo a confirmar na fase 2
+
+  - id: emprego-jovens
+    nome: Emprego de jovens nas funções expostas à IA
+    metrica: queda relativa (22–25 anos, funções mais expostas vs menos expostas)
+    fonte: stanford_canarios
+    coleta: manual
+    valor_inicial: "13% → 16% → 19% nas versões do estudo (2025–2026) — correlacional"
+    limiar: ">= 25%"
+    aponta: {4: sobe}
+    confianca: média
+
+  - id: emprego-brasil
+    nome: Admissões no Brasil nas ocupações expostas
+    metrica: saldo do CAGED em ocupações de escritório/TI vs total (12 meses)
+    fonte: caged
+    coleta: manual
+    limiar: "a definir na fase 2"
+    aponta: {4: sobe}
+    confianca: baixa — lacuna
+
+  - id: regulacao-adiada
+    nome: Regras de IA adiadas ou esvaziadas
+    metrica: mudanças no AI Act (Digital Omnibus) e no PL 2338 — adiou / manteve / endureceu
+    fonte: [eu_ai_act, pl_2338]
+    coleta: manual
+    valor_inicial: "acordo provisório de 07/05/2026 adia o alto risco do Anexo III para 02/12/2027 — a conferir no Official Journal"
+    limiar: "novo adiamento = sobe extinção; regra dura sobre compute = sobe governo"
+    aponta: {1: sobe, 3: sobe}
+    confianca: alta (fato), média (leitura)
+
+  - id: governanca-global
+    nome: Órgão internacional com poder real sobre compute
+    metrica: existe tratado/agência que licencia treino acima de um limite? (sim/não + qual)
+    fonte: manual
+    coleta: manual
+    limiar: "sim"
+    aponta: {3: sobe, 1: desce}
+    confianca: alta
+
+  - id: renda-basica
+    nome: Renda básica ou dividendos de IA em teste
+    metrica: programas públicos ativos ligados à automação (quantos, onde)
+    fonte: manual
+    coleta: manual
+    limiar: "programa nacional em país do G20"
+    aponta: {4: sobe, 5: sobe}
+    confianca: baixa
+
+  - id: delegacao-pessoal
+    nome: Decisões suas que a IA tomou na semana
+    metrica: na revisão semanal, de 0 a 10
+    fonte: pessoal
+    coleta: pessoal
+    limiar: ">= 7 por 4 semanas seguidas"
+    aponta: {2: sobe}
+    confianca: é sobre você, não sobre o mundo
+
+  - id: habilidade-propria
+    nome: Coisas que você não sabe mais fazer sem IA
+    metrica: lista na revisão mensal (escrever, calcular, achar caminho, decidir…)
+    fonte: pessoal
+    coleta: pessoal
+    limiar: "a lista cresceu 3 meses seguidos"
+    aponta: {2: sobe}
+    confianca: é sobre você
+
+  - id: parceria-ia
+    nome: Você está crescendo junto com a IA?
+    metrica: projetos seus da semana em que a IA ajudou e você aprendeu algo (0 a 5)
+    fonte: pessoal
+    coleta: pessoal
+    limiar: ">= 2 por semana = no caminho da utopia pessoal"
+    aponta: {5: sobe}
+    confianca: é sobre você

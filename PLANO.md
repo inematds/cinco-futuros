@@ -68,7 +68,7 @@ kit/
 O repo `sobreviver-ia` já tem o kit de 14 dias, a IA e a Wikipedia offline, a auditoria de contas com SMS, o eval pessoal e o plano de 90 dias. O cinco-futuros aponta para essas ferramentas nas ações robustas e não copia nenhuma delas.
 
 ## Fases
-1. **Cenários com sinais medidos:** `cenarios/*.md`, cada sinal com métrica, fonte, limiar e nível de confiança. Feito quando todo sinal tem fonte ou está marcado como "proposta".
+1. ✅ (23/10, 1ª versão) **Cenários com sinais medidos:** `cenarios/*.md`, cada sinal com métrica, fonte, limiar e nível de confiança. Feito quando todo sinal tem fonte ou está marcado como "proposta".
 2. **Coletor:** `coleta.py` gera `sinais.md`. Feito quando os testes rodam com fixtures e há uma coleta real que dá certo.
 3. **Skills + agenda:** as skills diagnóstico, agenda, sinais e revisão. Feito quando uma pessoa de teste roda do zero e sai com perfil, agenda e termômetro.
 4. **Guia PT/EN/ES + portal + vídeo**, no padrão INEMA.
